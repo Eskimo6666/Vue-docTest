@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.bootcss.com/vue/2.6.10/vue.common.dev.js"></script>
+    <title>Document</title>
+    <style>
+       [v-cloak]{
+           display: none;
+       }
+    </style>
+</head>
+
+<body>
+        <div id="app">
+              <p v-for='item in arr'>{{item}}</p> 
+              <div>{{matchOO}}</div>
+              <div>{{count}}</div>
+                <button @click = 'handle()'>点我加1</button>
+                <button @click = handle(8)>点我加8</button>
+              <button @click = 'sortArr'>点我排序</button> 
+              <button @click.once = 'reverArr'>点我反转</button>  
+              <button @click = 'changeOne'>点我改变第一项</button> 
+              <button @click = 'changeLength'>点我数组长度变为2</button>
+              <div @click = 'divClick' style="width:100px; height:100px;background:orange;">
+                  <button @click.stop = 'btnClick' style="background:orchid;">btn被点击了</button>
+              </div>
+              <form @submit.prevent="hangle" action="">
+                  <button type="submit">提交表单</button>
+              </form>
+              <div @click.self = 'divClick' style="width:200px; height:100px;background:orange;">
+                    <button @click = 'btnClick' style="background:orchid;">btn被点击了</button>
+            </div>
+            <input @keyup.enter = 'submit'>
+        </div>
+        
+        <script>
+          
+            let app = new Vue({
+                el:'#app',
+                data:{
+                   type:'name',
+                   count:99,
+                   xxList:{
+                    
+                       name1:'好好学习',
+                       name2:'天天向上',
+                       name:'haohao'
+                   
+                   },
+                   arr:['book','pen','apple']
+
+                   
+                    
+                },
+                computed:{
+                    matchOO:function(){
+                        return this.arr.filter(function(book){
+                            return book.match(/oo/)
+                        })
+                    }
+                },
+                methods:{
+                    toggle:function(){
+                        this.type = (this.type === 'name'? 'password':'name')
+                    },
+                    sortArr:function(){
+                        this.arr.sort(function(a,b){
+                            return a.length-b.length
+                        })
+                    },
+                    reverArr:function(){
+                        this.arr.reverse()
+                    },
+                    changeOne:function(){
+                        Vue.set(app.arr,1,'car')
+                    },
+                    changeLength:function(){
+                        app.arr.splice(2)
+                    },
+                    handle:function(count){
+                        count = count || 1
+                        this.count += count
+                    },
+                    divClick:function(){
+                        alert('div被点击了')
+                    },
+                    btnClick:function(){
+                        alert('btn被点击了')
+                    },
+                    hangle:function(){
+                        alert('我不重载')
+                    },
+                    submit:function(){
+                        alert('enter被点击了')
+                    }
+
+                }
+               
+            })
+        </script>
+</body>
+
+</html>

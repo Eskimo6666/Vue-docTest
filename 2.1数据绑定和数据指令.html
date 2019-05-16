@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    
+    <title>Document</title>
+</head>
+
+<body>
+    
+
+    <div id="app">
+        {{book.name}}<br>
+        {{6 < 3?book.name:"false"}}
+        <input v-model = 'n'>
+        {{n}}
+
+    </div>
+    <script src="https://cdn.bootcss.com/vue/2.6.10/vue.common.dev.js"></script>
+    <script>
+        let view = new Vue({
+            el: "#app",
+            data: {
+                book: {
+                    name: 'JavaScript高级程序设计',
+                    number: 5
+                },
+                n:2
+            },
+            created:function() {
+                alert('创建完成，还未挂载')
+            },
+            mounted:function() {
+                alert('创建完成且挂载')
+            }
+
+        })
+        console.log(view.$el)
+        console.log(view.book.name)
+
+    </script>
+</body>
+
+</html>

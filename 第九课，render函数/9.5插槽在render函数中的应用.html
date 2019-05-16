@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="http://vuejs.org/js/vue.js"></script>
+    <title>插槽在render函数里</title>
+</head>
+<body>
+    <div class="app">
+        <my-comp>
+            <template scope="prop">  <!---第一步创建一个template模板，第二步用scop接受，prop就可以拿到子组件传递过来的对象-->
+                {{prop.text}}
+                {{prop.msg}}
+            </template>
+        </my-comp>
+    </div>
+    <script>
+        Vue.component('my-comp',{
+            render:function(createElement){
+                //相当于<div><slot :text="text"></slot></div>
+                return createElement('div',[this.$scopedSlots.default({
+                    text:'我是子组件传递过来的数据',
+                    msg:'scopText'
+                })
+            ])
+            }
+        })
+        var app = new Vue({
+            el:'.app',
+            data:{
+
+            }
+        })
+    </script>
+</body>
+</html>

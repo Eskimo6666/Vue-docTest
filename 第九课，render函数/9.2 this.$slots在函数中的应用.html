@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="http://vuejs.org/js/vue.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="app">
+        <my-com>
+            <p>锄禾日当午</p>
+            <p>汗滴禾下土</p>
+            <h3 slot="header">我是标题</h3>
+            <h5 slot="footer">我是尾部</h5>
+        </my-com>
+    </div>
+    <script>
+        //第三个参数，本身存的就是虚拟节点Vnode(一个javaScript对象),检测到哪个节点发生变化就更新哪个节点，不用像之前重绘整个dom树
+        Vue.component('my-com',{
+            render:function(createElement){
+                var header = this.$slots.header //返回的内容就是含有vnode的数组
+                var footer = this.$slots.footer
+                var main = this.$slots.default
+                return createElement('div',[
+                    createElement('header',header),  //createElement返回的就是vnode
+                    createElement('main',main),
+                    createElement('footer',footer)
+                ])
+            }
+        })
+        var app = new Vue({
+            el:'.app',
+            data:{
+
+            }
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="http://vuejs.org/js/vue.js"></script>
+  <meta charset="utf-8">
+  <title>非父子组件传值  父链  子链</title>
+</head>
+<body>
+  <div class="app">
+    <mya ref="A"></mya>
+    <myb ref="B"></myb>
+    <child-component ref="C"></child-component>---{{msg}}
+    <button @click="setChildDate">父组件按钮点击修改子组件数据</button>------{{fromChild}}
+  </div>
+<script>
+  Vue.component('mya',{
+    template:'<button @click="handle">点我向b组件传递数据</button>',
+    data:function(){
+      return {
+        aaa:'我是A组件里的内容',
+        msg:'A----msg'
+      }
+    },
+    methods:{
+      handle:function(){
+        this.$root.bus.$emit('lala',this.aaa)  //a组件通过bus实例触发lala事件，并把a组件自己的aaa传递出去
+      }
+    }
+  })
+  Vue.component('myb',{
+    template:'<div></div>',
+    created:function(){
+      this.$root.bus.$on('lala',function(value){  //b组件实例生成时就通过bus监听lala事件，如果事件被触发，
+        console.log(value)                        //    aaa将会作为参数,传到这个函数中，并打印出来
+      })
+    },
+    data:function(){
+      return {
+        msg:'B----msg'
+      }
+    }
+  })
+  Vue.component('child-component',{               //子组件修改父组件的数据
+    template:'<button @click="setFathDate">点我修改父组件内容</button>',
+    methods:{                                     //子组件点击按钮触发对应的函数
+      setFathDate:function(){
+        this.$parent.msg = '爸爸被我修改了'          //函数中通过this.$parent访问到父组件并且拿到他的msg
+      }
+    },
+    data:function(){
+      return {
+        msg:"C----msg"
+      }
+    }
+  })
+  var app = new Vue({                             //父组件修改子组件的数据
+    el:'.app',
+    data:{
+      bus:new Vue(),
+      msg:'ddd',
+      fromChild:'原始父组件数据'                    //由于一个父组件的子组件有很多个，为了取到指定子组件的数据，在每个子组件
+    },                                           //中，通过在标签里加ref来区分组件，父组件定义button，点击后执行对应方法
+    methods:{                                    //方法中通过this.$refs.xxx.msg拿到对应组件的数据
+      setChildDate:function(){        
+        this.fromChild = this.$refs.A.msg
+      }
+    }
+  })
+</script>
+</body>
+</html>

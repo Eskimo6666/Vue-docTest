@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="http://vuejs.org/js/vue.js"></script>
+    <title>render函数</title>
+</head>
+
+<body>
+    <div class="app">
+        <child :level="level">
+            我是子组件
+        </child>
+        <my-com>
+
+        </my-com>
+    </div>
+    <!-- <template id="hom">
+        <div>
+            <h1 v-if="level === 1">
+                <slot></slot>
+            </h1>
+            <h2 v-if="level === 2">
+                <slot></slot>
+            </h2>
+            <h3 v-if="level === 3">
+                <slot></slot>
+            </h3>
+        </div>
+    </template> -->
+    <script>
+        /* Vue.component('child',{
+            props:['level'],
+            template:'#hom'
+        }) */
+        Vue.component('my-com', {
+            render: function (createElement) {
+                return createElement('div',{'class':{ddd:true}}, [ //第三个参数一般是Array,代表子节点
+                    createElement('h1', {      //创建一个class名为ddd的div,他的子节点是一个符合h1第二个参数的h1标签
+                        'class': {             //第二个元素一定是对象类型的
+                            foo: true,         //第一个元素是必选的
+                            doo: false
+                        },
+                        style: {
+                            color: 'red',
+                            fontSize: '14px'
+                        },
+                        domProps: {
+                            innerHTML: 'baz'
+                        },
+                    }),
+                    createElement('h2','你好我是第三个元素')   //第三个元素可以是数组(代表子节点)，也可以是字符串(及生成一个文本，文本也是一个节点)
+                ])
+            }
+
+        })
+        Vue.component('child', {
+            render: function (createElement) {
+                return createElement('h' + this.level, this.$slots.default)
+            },
+            props: ['level']
+        })
+        var app = new Vue({
+            el: '.app',
+            data: {
+                level: 3
+            }
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="{CHARSET}">
+		<title></title>
+		<script src="https://cdn.bootcss.com/vue/2.6.10/vue.common.dev.js"></script>
+		<style>
+			.divStyle{
+				width:100px;
+				height:100px;
+				background:orange;
+			}
+			.btnBackgriound{
+				background:red;
+				width:red;
+				
+			}
+			.active{
+				width:100px;
+				height:200px;
+				background:green;
+			}
+			.error{
+				border:4px solid indianred;
+			}
+		</style>
+	</head>
+	<body>
+	<div id="app">
+		<a v-bind:href="url">hello am baidu</a>
+		<img :src="imgUrl" alt="" />
+		<div :class="{divStyle:isActive}"></div>
+		<input type="button" :class={btnBackgriound:isback} value="press me" v-on:click="changeColor"/>
+		<div :class="className">
+			hahah
+		</div>
+		<div :class="[activeClass,errorClass]">
+			Arry syn
+		</div>
+		<div :class="[{active:isActive},errorClass]">
+			mix up
+		</div>
+		<div v-bind:style="{color:color,fontSize:fontSize+'px'}">
+			Bind Style With v-bindmnsmnz
+		</div>
+	</div>
+	<script type="text/javascript">
+			var app=new Vue({
+				el:"#app",
+				data:{
+					url:"https://www.baidu.com/img/bd_logo1.png",
+					imgUrl:"https://www.baidu.com/img/bd_logo1.png",
+					isActive:true,
+					isboard:false,
+					isback:true,
+					activeClass:'active',
+					errorClass:'error',
+					color:'red',
+					fontSize:18
+				},
+				methods:{
+					changeColor:function(){
+						this.isback = !this.isback
+					}
+				},
+				computed:{
+					className:function(){
+						return {
+							active:this.isActive && !this.isboard
+						}
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

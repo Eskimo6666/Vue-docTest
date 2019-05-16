@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="http://vuejs.org/js/vue.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="app">
+        <button @click="switchShow">点击按钮切换图片</button> {{show}}  
+        <my-com :show="show">
+
+        </my-com>
+    </div>
+    <script>
+        //点击按钮切换图片
+        Vue.component('my-com',{
+            props:['show'],     //子组件动态绑定show,并用props接收
+            render:function(createElement){
+                var imgSrc;
+                if(this.show){        //那么子组件就可以拿到show并进行判断
+                    imgSrc = 'https://cn.vuejs.org/images/logo.png'
+                }else{
+                    imgSrc = 'https://cn.vuejs.org/images/dom-tree.png'
+                }
+                return createElement('img',{     //把createElement返回出去,第二个参数attrs设置src
+                    attrs:{
+                        src:imgSrc
+                    },
+                    style:{
+                        width:'200px',
+                        height:'200px'
+                    }
+                })
+            }
+        })
+        var app = new Vue({
+            el:'.app',
+            data:{
+                show:false
+            },
+            methods:{               //通过点击按钮可以改变show的true/false
+                switchShow:function(){
+                    this.show = ! this.show
+                }
+            }
+        })
+    </script>
+</body>
+</html>

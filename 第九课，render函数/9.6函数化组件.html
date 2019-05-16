@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="http://vuejs.org/js/vue.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="app">
+        <my-comp value="haha">
+
+        </my-comp>
+    </div>
+    <script>
+        //this.text----------context.props.text
+        //this.$slots.default----------context.children
+        Vue.component('my-comp',{
+            
+            functional:true,//表示当前的Vue实例无状态。无实例（没有this)
+        
+            render:function(createElement,context){  //context(上下文对象）可以拿到实例所需的data,props,slots
+                
+                return createElement('button',{
+                    on:{
+                        click:function(){
+                            
+                            console.log(context)
+                            console.log(context.parent)
+                            console.log(context.parent.msg)
+                            console.log(context.props.value)
+                            console.log(this.value)  //underfined此时的this是window
+                        }
+                    }
+                },'点击我学习context')
+            },
+            props:['value']
+        })
+        var app = new Vue({
+            el:'.app',
+            data:{
+                msg:'我是父组件的内容'
+            }
+        })
+    </script>
+</body>
+</html>

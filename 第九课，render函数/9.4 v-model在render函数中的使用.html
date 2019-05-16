@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="http://vuejs.org/js/vue.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="app">
+        <!-- <my-com :name="name" @input="showName">  -触发父组件的showName方法-- -->
+        
+        <!-- </my-com> -->
+        <my-com :name="name" v-model="name"></my-com>  
+        <br>{{name}}
+    </div>
+    <script>
+        Vue.component('my-com',{
+            render:function(createElement){
+                var self = this   //指的就是当前的VUE实例
+                return createElement('input',{
+                    domProps:{
+                        value:self.name
+                    },
+                    on:{
+                        input:function(event){       //输入时触发子组件的input事件
+                            self.$emit('input',event.target.value)  //event是触发的默认事件。第二个参数把输入的信息传递出来
+                        }  //不能this.$emit调用，因为这里的this是window,而我们需要的是Vue实例
+                    }
+                })
+            },
+            props:['name']
+        })
+        var app = new Vue({
+            el:'.app',
+            data:{
+                name:'Jack'
+            },
+            /* methods:{            //对应父组件监听的input事件的showName方法，value参数就是子组件传递出来的参数
+                showName:function(value){
+                    this.name = value
+                }
+            } */
+        })
+    </script>
+</body>
+</html>

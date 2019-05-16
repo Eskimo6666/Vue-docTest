@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="http://vuejs.org/js/vue.js"></script>
+    <meta charset="utf-8">
+    <title>子组件给父组件传递数据</title>
+</head>
+
+<body>
+    <div class="app">
+
+
+        <custom-input v-model="searchText"></custom-input><br>
+        {{searchText}}<br>
+        <base-checkbox v-model="lovingVue"></base-checkbox><br>
+        {{lovingVue}}
+    </div>
+    <script>
+        var app = new Vue({
+            el: '.app',
+            data: { total: 0, searchText: '', value: '', lovingVue: '' },
+            watch: {
+                searchText: function (newVal) {
+                    console.log(newVal)
+                },
+                value: function (newVal) {
+                    console.log(newVal)
+                },
+                lovingVue: function (newVal) {
+                    console.log(newVal)
+                }
+            },
+            components: {
+
+                'custom-input': {
+                    props: ['value'],   //组件内的input必须将其value绑定在一个名为value的props上面
+                    template: `<input v-bind:value='value' v-on:input="$emit('input',$event.target.value)">`
+                    //在input事件被触发时，将其新的值通过自定义的input事件抛出
+                },
+                'base-checkbox': {
+                    model: {
+                        prop: 'checked',
+                        event: 'change'
+                    },             //model就是为了定制prop和事件，因为默认是传到名为value的prop,和input事件，现在定义成传到名为checked的prop以及名为change的事件
+                    props: {
+                        checked: Boolean
+                    },
+                    template: `
+      <input
+        type="checkbox"
+        v-bind:checked="checked"
+        v-on:change="$emit('change', $event.target.checked)"
+      >
+    `
+                }
+            },
+            methods: {
+                handleTatal: function (total) {
+                    this.total = total
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

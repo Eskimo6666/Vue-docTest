@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <p>您的银行余额是{{total}}</p>
+        
+        <btn-compnent1 @change="handleTotal"></btn-compnent1>
+        <table>
+            <my-component></my-component>
+            <!----有时会受到html标签的限制，这时用到is属性来挂载组件-->
+            <td is="my-component"></td>
+        </table>
+        <button @click='count++'>{{count}}</button>
+        <btn-component :msg='[3,6,9]'></btn-component>
+        <!---之前点击任何一个button两个都会加一，因为他们公用一个count-->
+        <my-comp init-count='666'></my-comp>
+        <input type="text" v-model='parentMsg'>
+        <bind-comp :msg='parentMsg'></bind-comp>
+        ----------------
+        <input type="text" v-model='width'>
+        <my-comp :width="width"></my-comp>
+        <navigation-link url="/profile">
+            <span class="fa">哈哈哈</span>
+            <my-comp init-count='666'></my-comp>
+            Logged in as {{user.name}}
+            Your Profile
+        </navigation-link>
+        <submit-button>
+
+        </submit-button>
+
+        <base-layout>
+            <template v-slot:header>
+                <h1>Here might be a page title</h1>
+            </template>
+
+            <template v-slot:default>
+                <p>A paragraph for the main content.</p>
+                <p>And another one.</p>
+            </template>
+
+            <template v-slot:footer>
+                <p>Here's some contact info</p>
+            </template>
+        </base-layout>
+        <current-user>
+                <template v-slot:default="slotProps">
+                  {{ slotProps.user.firstName}}
+                </template>
+        </current-user>
+        <custom-input
+        v-model="searchText"
+        ></custom-input>
+    </div>
+    <script>
+        Vue.component('my-component', {
+            template: '<div>我是组件的内容</div>'
+        })
+        var app = new Vue({
+            el: "#app",
+            data: {
+                total:0,
+                parentMsg: '今晚月亮真圆',
+                searchText:'',
+                initCount: '',
+                xxx: "sd",
+                count: 0,
+                width: 0,
+                user:{'firstName':'xxx','lastName':'yyy'}
+            },
+            watch: {
+                searchText: function (newVal) {
+                    console.log(newVal)
+                }
+            },
+            components: {
+                'btn-compnent1':{
+                    template:'<div>\
+                        <button @click = "handleincrease">+1</button>\
+                        <button @click = "handlereduce">-1</button>\
+                    </div>',
+                    data:function(){
+                        return{
+                            count:0
+                        }
+                    },
+                    methods:{
+                        handleincrease : function(){
+                            this.count++
+                            this.$emit('change',this.count)
+                        },
+                        handlereduce :function(){
+                            this.count--
+                            this.$emit('change',this.count)
+                        }
+                    }
+                },
+                'bind-comp': {
+                    props: ['msg'],
+                    template: '<div>{{msg}}</div>'
+                },
+                'component-2': {
+                   
+                },
+                'btn-component': {
+                    props: ['msg'],
+                    template: '<button @click = "count++">{{count}}---- {{msg.length}}</button>',
+                    data: function () {
+                        return {
+                            count: 0
+                        }
+                    }
+                },
+                'navigation-link ': {
+                    template: '<a v-bind:href="url" class="nav-link"><slot></slot></a>'
+                },
+                'submit-button': {
+                    template: '<button type="submit"><slot>Submit</slot></button>'
+                },
+                'base-layout': {
+                    template: `
+                    <div class="container">
+                        <header>
+                            <slot name="header"></slot>
+                        </header>
+                        <main>
+                            <slot></slot>
+                        </main>
+                        <footer>
+                            <slot name="footer"></slot>
+                        </footer>
+                    </div>
+                    `
+                },
+                'current-user':{
+                    props:['user'],
+                    template:`
+                    <span>
+                        <slot v-bind:data="data" name="slotProps">
+                            {{data.firstName}}
+                        </slot>
+                    </span>`,
+                    data:function(){
+                        return {
+                            data:{firstName:'XXX',lastName:'yyy'}
+                        }
+                    }
+                },
+                'custom-input':{
+                    props:['value'],
+                    template:`<input v-bind:value='value' v-on:input="$emit('input',$event.target.value)">`
+                },
+                'my-comp': {
+                    props: ['init-count', 'width'],
+                    template: '<div :style="style">hhhh{{initCount}}</div>',
+                    computed: {
+                        style: function () {
+                            return {
+                                width: this.width + 'px',
+                                background: 'red'
+                            }
+                        }
+                    },
+                    data: function () {
+                        return {
+                            count: this.initCount
+                        }
+                    }
+                }
+            },
+            methods:{
+                handleTotal : function(total){
+                    this.total = total
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

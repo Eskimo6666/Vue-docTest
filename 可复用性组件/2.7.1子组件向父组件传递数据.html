@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="http://vuejs.org/js/vue.js"></script>
+    <meta charset="utf-8">
+    <title>子组件给父组件传递数据</title>
+</head>
+
+<body>
+    <div class="app">
+        <p>您的账户余额是{{total}}</p>
+        <bind @change="handleTatal"></bind>  <!--@=>v-on:父组件可以通过v-on来监听子组件实例的任意事件-->
+        <custom-input v-model="searchText"></custom-input>
+    </div>
+    <script>
+        var app = new Vue({
+            el: '.app',
+            data: { total: 0,searchText:'' },
+            watch: {
+                searchText: function (newVal) {
+                    console.log(newVal)
+                }
+            },
+            components: {
+                'bind': {
+                    template: `
+            <div>
+              <button @click="handleincrese">+1</button>
+              <button @click="handlereduce">-1</button>
+            </div>`,
+                    data: function () {
+                        return {
+                            count: 0
+                        }
+                    },
+
+                    methods: {
+                        handleincrese: function () {
+                            this.count++
+                            this.$emit('change', this.count)  //子组件可以通过调用内置的$emit方法并传入事件名来触发事件
+                        },
+                        handlereduce: function () {
+                            this.count--
+                            this.$emit('change', this.count)  //$emit第二个值用来抛出值
+                        }
+                    }
+                },
+                'custom-input': {
+                    props: ['value'],
+                    template: `<input v-bind:value='value' v-on:input="$emit('input',$event.target.value)">`
+                    //$event用来接收$emit抛出来的值
+                },
+
+            },
+            methods: {
+                handleTatal: function (total) {
+                    this.total = total  //或者通过一个函数  这里传进来的total就是抛出来的值
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
